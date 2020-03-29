@@ -1,8 +1,5 @@
-CONFIG -= qt
-
 TEMPLATE = lib
 DEFINES += MIATS_LIBRARY
-
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -20,7 +17,11 @@ SOURCES += \
     miats.cpp
 
 HEADERS += \
-    miats.h
+    MIAts_global.h \
+    miats.h \
+    inc/AlazarApi.h \
+    inc/AlazarCmd.h \
+    inc/AlazarError.h
 
 # Default rules for deployment.
 unix {
@@ -34,6 +35,14 @@ DESTDIR = ../../bin/Debug
 DESTDIR = ../../bin/Release
 }
 
-INCLUDEPATH += \
-    ../../lib/MIDef/
+INCLUDEPATH += ../../lib/MIDef/
+INCLUDEPATH += ../../lib/MICfg/
+INCLUDEPATH += $$PWD/inc/
+
+DEPENDPATH += ../../lib/MIDef/
+DEPENDPATH += ../../lib/MICfg/
+DEPENDPATH += $$PWD/lib/x64/
+
+LIBS += -L$$PWD/lib/x64/ -lAtsApi
+
 

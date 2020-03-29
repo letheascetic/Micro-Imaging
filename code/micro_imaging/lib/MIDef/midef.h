@@ -10,7 +10,7 @@
 typedef enum _MI_RESULTS
 {
     API_SUCCESS = API_RETURN_CODE_STARTS,    // 512
-    APC_FAILED                               // 513
+    API_FAILED                               // 513
 } MI_RESULTS;
 
 

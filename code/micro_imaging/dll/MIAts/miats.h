@@ -1,10 +1,15 @@
 #ifndef MIATS_H
 #define MIATS_H
 
-class MIAts
-{
-public:
-    MIAts();
-};
+#include "midef.h"
+#include "micfg.h"
+#include "MIAts_global.h"
+
+typedef void* ATS;
+
+ATS MIAtsOpen(void);
+void MIAtsClose(void);
+
+MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig);
 
 #endif // MIATS_H

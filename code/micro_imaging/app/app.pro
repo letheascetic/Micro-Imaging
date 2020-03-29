@@ -41,10 +41,11 @@ DESTDIR = ../bin/Release
 LIBS += -L../bin/Release
 }
 
-INCLUDEPATH += \
-    ../lib/MIDef/
-
-LIBS += \
-    -lMIDef
+INCLUDEPATH += ../lib/MIDef/
+INCLUDEPATH += ../lib/MICfg/
+DEPENDPATH += ../lib/MIDef/
+DEPENDPATH += ../lib/MICfg/
+LIBS += -lMIDef
+LIBS += -lMICfg
 
 

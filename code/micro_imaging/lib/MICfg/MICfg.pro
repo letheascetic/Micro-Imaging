@@ -34,7 +34,7 @@ DESTDIR = ../../bin/Debug
 DESTDIR = ../../bin/Release
 }
 
-INCLUDEPATH += \
-    ../MIDef/
-
+INCLUDEPATH += ../MIDef/
+DEPENDPATH += ../MIDef/
+LIBS += -lMIDef
 
