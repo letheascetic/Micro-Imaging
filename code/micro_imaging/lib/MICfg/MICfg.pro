@@ -1,6 +1,6 @@
-QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+TEMPLATE = lib
+CONFIG += staticlib
 
 CONFIG += c++11
 
@@ -16,35 +16,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp
+    micfg.cpp
 
 HEADERS += \
-    mainwindow.h
-
-FORMS += \
-    mainwindow.ui
-
-TRANSLATIONS += \
-    app_zh_CN.ts
+    micfg.h
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+unix {
+    target.path = $$[QT_INSTALL_PLUGINS]/generic
+}
 !isEmpty(target.path): INSTALLS += target
 
+
 CONFIG(debug, debug|release) {
-DESTDIR = ../bin/Debug
-LIBS += -L../bin/Debug
+DESTDIR = ../../bin/Debug
 } else {
-DESTDIR = ../bin/Release
-LIBS += -L../bin/Release
+DESTDIR = ../../bin/Release
 }
 
 INCLUDEPATH += \
-    ../lib/MIDef/
-
-LIBS += \
-    -lMIDef
+    ../MIDef/
 
 
