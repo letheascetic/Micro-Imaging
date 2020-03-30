@@ -17,9 +17,6 @@ typedef uint16_t LASER_CHAN_SWITCH;
 #define LASER_CHAN_SWITCH_ON  0x0001
 
 typedef LASER_CHAN_ID PMT_CHAN_ID;
-#define LASER_CHAN_NUM 4
-
-#define PMT_CHAN_NUM LASER_CHAN_NUM
 
 typedef uint16_t SCAN_MODE;
 typedef uint16_t SCAN_STRATEGY;
@@ -40,6 +37,8 @@ typedef void* CONFIG;
 
 CONFIG MICfgGetConfiguration(void);
 void MICfgFreeConfiguration(void);
+
+uint32_t MICfgGetChannelNum(void);
 
 MI_RESULTS MICfgLaserSetSwitch(CONFIG pConfig, LASER_CHAN_ID id, LASER_CHAN_SWITCH status);
 MI_RESULTS MICfgLaserSetPower(CONFIG pConfig, LASER_CHAN_ID id, double power);

@@ -1,5 +1,9 @@
 #include "micfg.h"
 
+#define CHAN_NUM (4)
+#define LASER_CHAN_NUM CHAN_NUM
+#define PMT_CHAN_NUM CHAN_NUM
+
 #define LASER_POWER_DEFAULT     10.0
 #define PMT_GAIN_DEFAULT        10.0
 #define CRS_AMPLITUDE_DEFAULT   3.3
@@ -68,6 +72,11 @@ void MICfgFreeConfiguration()
     pMIcfg = NULL;
 }
 
+uint32_t MICfgGetChannelNum(void)
+{
+    return CHAN_NUM;
+}
+
 MI_RESULTS MICfgLaserSetSwitch(CONFIG pConfig, LASER_CHAN_ID id, LASER_CHAN_SWITCH status)
 {
     ((PMICfg)pConfig)->LaserChannels[id].status = status;
@@ -106,7 +115,6 @@ double MICfgCRSGetAmplitude(CONFIG pConfig)
 {
     return ((PMICfg)pConfig)->mCRS.Amplitude;
 }
-
 
 _MI_CFG::_MI_CFG()
 {
