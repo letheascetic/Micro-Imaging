@@ -1,5 +1,8 @@
+QT -= gui
+
 TEMPLATE = lib
-DEFINES += MIATS_LIBRARY
+DEFINES += ABC_LIBRARY
+
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -14,39 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ats.cpp \
-    miats.cpp \
-    worker.cpp
+    abc.cpp
 
 HEADERS += \
-    MIAts_global.h \
-    ats.h \
-    miats.h \
-    inc/AlazarApi.h \
-    inc/AlazarCmd.h \
-    inc/AlazarError.h \
-    worker.h
+    abc_global.h \
+    abc.h
 
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
-
-CONFIG(debug, debug|release) {
-DESTDIR = ../../bin/Debug
-} else {
-DESTDIR = ../../bin/Release
-}
-
-INCLUDEPATH += ../../lib/MIDef/
-INCLUDEPATH += ../../lib/MICfg/
-INCLUDEPATH += $$PWD/inc/
-
-DEPENDPATH += ../../lib/MIDef/
-DEPENDPATH += ../../lib/MICfg/
-DEPENDPATH += $$PWD/lib/x64/
-
-LIBS += -L$$PWD/lib/x64/ -lAtsApi
-
-

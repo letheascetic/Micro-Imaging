@@ -36,7 +36,7 @@ typedef uint16_t SCAN_POINTS;
 typedef void* CONFIG;
 
 CONFIG MICfgGetConfiguration(void);
-void MICfgFreeConfiguration(void);
+//void MICfgFreeConfiguration(void);
 
 uint32_t MICfgGetChannelNum(void);
 

@@ -45,7 +45,8 @@ struct _MI_CFG
 
 typedef struct _MI_CFG MICfg, *PMICfg;
 
-CONFIG pMIcfg = NULL;
+MICfg m_MICfg;
+CONFIG pMIcfg = &m_MICfg;
 
 void LaserInit(CONFIG pConfig);
 void PMTInit(CONFIG pConfig);
@@ -55,22 +56,9 @@ void ScanInit(CONFIG pConfig);
 
 CONFIG MICfgGetConfiguration()
 {
-    if(pMIcfg == NULL)
-    {
-        pMIcfg = new MICfg();
-    }
     return pMIcfg;
 }
 
-void MICfgFreeConfiguration()
-{
-    if(pMIcfg == NULL)
-    {
-        return;
-    }
-    delete (PMICfg)pMIcfg;
-    pMIcfg = NULL;
-}
 
 uint32_t MICfgGetChannelNum(void)
 {

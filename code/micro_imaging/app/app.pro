@@ -43,9 +43,13 @@ LIBS += -L../bin/Release
 
 INCLUDEPATH += ../lib/MIDef/
 INCLUDEPATH += ../lib/MICfg/
+INCLUDEPATH += ../dll/MIAts/
 DEPENDPATH += ../lib/MIDef/
 DEPENDPATH += ../lib/MICfg/
+DEPENDPATH += ../dll/MIAts/
 LIBS += -lMIDef
 LIBS += -lMICfg
+LIBS += -lMIAts
+
 
 
