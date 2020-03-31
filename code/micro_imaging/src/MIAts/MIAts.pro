@@ -20,12 +20,10 @@ SOURCES += \
 
 HEADERS += \
     MIAts_global.h \
-    inc/AlazarApi.h \
-    inc/AlazarCmd.h \
-    inc/AlazarError.h \
     miats.h \
     worker.h \
     ats.h
+
 
 # Default rules for deployment.
 unix {
@@ -35,18 +33,22 @@ unix {
 
 CONFIG(debug, debug|release) {
 DESTDIR = ../../bin/Debug
+LIBS += -L../../bin/Debug
 } else {
 DESTDIR = ../../bin/Release
+LIBS += -L../../bin/Release
 }
 
-INCLUDEPATH += ../../lib/MIDef/
-INCLUDEPATH += ../../lib/MICfg/
+INCLUDEPATH += ../MIDef/
+INCLUDEPATH += ../MICfg/
 INCLUDEPATH += $$PWD/inc/
 
-DEPENDPATH += ../../lib/MIDef/
-DEPENDPATH += ../../lib/MICfg/
+DEPENDPATH += ../MIDef/
+DEPENDPATH += ../MICfg/
 DEPENDPATH += $$PWD/lib/x64/
 
 LIBS += -L$$PWD/lib/x64/ -lAtsApi
+LIBS += -lMICfg
+LIBS += -lMIDef
 
 

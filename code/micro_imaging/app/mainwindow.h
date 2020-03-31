@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "miats.h"
+//#include "miats.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

@@ -56,6 +56,7 @@ void ScanInit(CONFIG pConfig);
 
 CONFIG MICfgGetConfiguration()
 {
+    Test();
     return pMIcfg;
 }
 

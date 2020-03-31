@@ -34,5 +34,6 @@ typedef enum _MI_RESULTS
     API_FAILED_ATS_ABORT_ASYNC_READ_FAILED
 } MI_RESULTS;
 
+void Test();
 
 #endif // MIDEF_H
