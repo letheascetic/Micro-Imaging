@@ -4,10 +4,10 @@
 #define LASER_CHAN_NUM CHAN_NUM
 #define PMT_CHAN_NUM CHAN_NUM
 
-#define LASER_POWER_DEFAULT     10.0
-#define PMT_GAIN_DEFAULT        10.0
-#define CRS_AMPLITUDE_DEFAULT   3.3
-#define SCAN_POINTS_DEFAULT     1024
+#define LASER_POWER_DEFAULT     (10.0)
+#define PMT_GAIN_DEFAULT        (10.0)
+#define CRS_AMPLITUDE_DEFAULT   (3.3)
+#define SCAN_POINTS_DEFAULT     (1024)
 
 typedef struct _LASER_CHAN {
     LASER_CHAN_ID id;
@@ -59,7 +59,6 @@ CONFIG MICfgGetConfiguration()
     return pMIcfg;
 }
 
-
 uint32_t MICfgGetChannelNum(void)
 {
     return CHAN_NUM;
@@ -102,6 +101,61 @@ MI_RESULTS MICfgCRSSetAmplitude(CONFIG pConfig, double amplitude)
 double MICfgCRSGetAmplitude(CONFIG pConfig)
 {
     return ((PMICfg)pConfig)->mCRS.Amplitude;
+}
+
+MI_RESULTS MICfgSetScanMode(CONFIG pConfig, SCAN_MODE mode)
+{
+    ((PMICfg)pConfig)->mSCAN.Mode = mode;
+    return API_SUCCESS;
+}
+
+MI_RESULTS MICfgSetScanStartegy(CONFIG pConfig, SCAN_STRATEGY startegy)
+{
+    ((PMICfg)pConfig)->mSCAN.Strategy = startegy;
+    return API_SUCCESS;
+}
+
+MI_RESULTS MICfgSetScanPointsX(CONFIG pConfig, SCAN_POINTS x)
+{
+    ((PMICfg)pConfig)->mSCAN.X = x;
+    return API_SUCCESS;
+}
+
+MI_RESULTS MICfgSetScanPointsY(CONFIG pConfig, SCAN_POINTS y)
+{
+    ((PMICfg)pConfig)->mSCAN.Y = y;
+    return API_SUCCESS;
+}
+
+MI_RESULTS MICfgSetScanFlag(CONFIG pConfig, SCAN_FLAG flag)
+{
+    ((PMICfg)pConfig)->mSCAN.Flag = flag;
+    return API_SUCCESS;
+}
+
+SCAN_MODE MICfgGetSacnMode(CONFIG pConfig)
+{
+    return ((PMICfg)pConfig)->mSCAN.Mode;
+}
+
+SCAN_STRATEGY MICfgGetScanStartegy(CONFIG pConfig)
+{
+    return ((PMICfg)pConfig)->mSCAN.Strategy;
+}
+
+SCAN_POINTS MICfgGetScanPointsX(CONFIG pConfig)
+{
+    return ((PMICfg)pConfig)->mSCAN.X;
+}
+
+SCAN_POINTS MICfgGetScanPointsY(CONFIG pConfig)
+{
+    return ((PMICfg)pConfig)->mSCAN.Y;
+}
+
+SCAN_FLAG MICfgGetScanFlag(CONFIG pConfig)
+{
+    return ((PMICfg)pConfig)->mSCAN.Flag;
 }
 
 _MI_CFG::_MI_CFG()

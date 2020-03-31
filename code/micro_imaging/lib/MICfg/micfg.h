@@ -51,5 +51,16 @@ double MICfgPMTGetGain(CONFIG pConfig, PMT_CHAN_ID id);
 MI_RESULTS MICfgCRSSetAmplitude(CONFIG pConfig, double amplitude);
 double MICfgCRSGetAmplitude(CONFIG pConfig);
 
+MI_RESULTS MICfgSetScanMode(CONFIG pConfig, SCAN_MODE mode);
+MI_RESULTS MICfgSetScanStartegy(CONFIG pConfig, SCAN_STRATEGY startegy);
+MI_RESULTS MICfgSetScanPointsX(CONFIG pConfig, SCAN_POINTS x);
+MI_RESULTS MICfgSetScanPointsY(CONFIG pConfig, SCAN_POINTS y);
+MI_RESULTS MICfgSetScanFlag(CONFIG pConfig, SCAN_FLAG flag);
+SCAN_MODE MICfgGetSacnMode(CONFIG pConfig);
+SCAN_STRATEGY MICfgGetScanStartegy(CONFIG pConfig);
+SCAN_POINTS MICfgGetScanPointsX(CONFIG pConfig);
+SCAN_POINTS MICfgGetScanPointsY(CONFIG pConfig);
+SCAN_FLAG MICfgGetScanFlag(CONFIG pConfig);
+
 
 #endif // MICFG_H

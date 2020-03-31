@@ -14,18 +14,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ats.cpp \
     miats.cpp \
-    worker.cpp
+    worker.cpp \
+    ats.cpp
 
 HEADERS += \
     MIAts_global.h \
-    ats.h \
-    miats.h \
     inc/AlazarApi.h \
     inc/AlazarCmd.h \
     inc/AlazarError.h \
-    worker.h
+    miats.h \
+    worker.h \
+    ats.h
 
 # Default rules for deployment.
 unix {

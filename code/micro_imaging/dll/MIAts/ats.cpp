@@ -1,4 +1,5 @@
 #include "ats.h"
+#include "AlazarApi.h"
 
 #define ALAZAR_BOARD_SYSTEM_ID 0x01
 #define ALAZAR_BOARD_ID        0x01
@@ -97,7 +98,6 @@ MI_RESULTS MIAtsGetInfo(ATS pAts, PATS_INFO pAtsInfo)
 
 MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
 {
-
     if(pAts == NULL)
     {
         return API_FAILED_ATS_HANDLE_INVALID;
@@ -111,7 +111,7 @@ MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
     HANDLE handle = ((PMIAts)pAts)->handle;
     RETURN_CODE code = ApiSuccess;
 
-    // set clock: internal_clock, sample_rate, clock_edge,
+    // set clock: internal_clock, sample_rate, clock_edge
     code = AlazarSetCaptureClock(handle, INTERNAL_CLOCK, SAMPLE_RATE_10MSPS, CLOCK_EDGE_RISING, 0);
     if(code != ApiSuccess)
     {
@@ -119,7 +119,22 @@ MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
     }
 
     // config input channel: gain, coupling, termination, input_range
-    code = AlazarInputControl(handle, CHANNEL_ALL, DC_COUPLING, INPUT_RANGE_PM_4_V, IMPEDANCE_50_OHM);
+    code = AlazarInputControlEx(handle, CHANNEL_A, DC_COUPLING, INPUT_RANGE_PM_4_V, IMPEDANCE_50_OHM);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_SET_INPUT_CHANNEL_FAILED;
+    }
+    code = AlazarInputControlEx(handle, CHANNEL_B, DC_COUPLING, INPUT_RANGE_PM_4_V, IMPEDANCE_50_OHM);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_SET_INPUT_CHANNEL_FAILED;
+    }
+    code = AlazarInputControlEx(handle, CHANNEL_C, DC_COUPLING, INPUT_RANGE_PM_4_V, IMPEDANCE_50_OHM);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_SET_INPUT_CHANNEL_FAILED;
+    }
+    code = AlazarInputControlEx(handle, CHANNEL_D, DC_COUPLING, INPUT_RANGE_PM_4_V, IMPEDANCE_50_OHM);
     if(code != ApiSuccess)
     {
         return API_FAILED_ATS_SET_INPUT_CHANNEL_FAILED;
@@ -176,4 +191,24 @@ MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
     return API_SUCCESS;
 }
 
+MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
+{
+    if(pAts == NULL)
+    {
+        return API_FAILED_ATS_HANDLE_INVALID;
+    }
 
+    if(pConfig == NULL)
+    {
+        return API_FAILED_CONFIG_HANDLE_INVALID;
+    }
+
+    HANDLE handle = ((PMIAts)pAts)->handle;
+    PATS_WORKER worker = ((PMIAts)pAts)->worker;
+
+    // define pre-trigger-samples/post-trigger-samples
+    uint32_t preTriggerSamples = 0;
+
+
+    return API_SUCCESS;
+}

@@ -6,9 +6,9 @@
 #include "midef.h"
 #include "micfg.h"
 #include "worker.h"
-#include "AlazarApi.h"
-#include "AlazarCmd.h"
-#include "AlazarError.h"
+#include "inc/AlazarApi.h"
+#include "inc/AlazarCmd.h"
+#include "inc/AlazarError.h"
 
 typedef void* ATS;
 

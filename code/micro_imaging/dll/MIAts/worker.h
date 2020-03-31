@@ -23,4 +23,6 @@ private:
     QMutex m_mutex;
 };
 
+typedef ATS_WORKER* PATS_WORKER;
+
 #endif // WORKER_H
