@@ -1,5 +1,4 @@
 #include "ats.h"
-#include "AlazarApi.h"
 
 #define ALAZAR_BOARD_SYSTEM_ID 0x01
 #define ALAZAR_BOARD_ID        0x01
@@ -10,6 +9,7 @@ _MI_ATS::_MI_ATS()
 {
     handle = NULL;
     worker = NULL;
+    buffer = NULL;
 }
 
 _MI_ATS::~_MI_ATS()
@@ -20,6 +20,11 @@ _MI_ATS::~_MI_ATS()
         delete worker;
     }
     worker = NULL;
+    if(buffer != NULL)
+    {
+        delete buffer;
+    }
+    buffer = NULL;
 }
 
 ATS MIAtsOpen(void)
@@ -203,12 +208,120 @@ MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
         return API_FAILED_CONFIG_HANDLE_INVALID;
     }
 
-    HANDLE handle = ((PMIAts)pAts)->handle;
-    PATS_WORKER worker = ((PMIAts)pAts)->worker;
+    PMIAts ats = (PMIAts)pAts;
+    RETURN_CODE code = ApiSuccess;
 
     // define pre-trigger-samples/post-trigger-samples
+    SCAN_POINTS x = MICfgGetScanPointsX(pConfig);
+    SCAN_POINTS y = MICfgGetScanPointsY(pConfig);
     uint32_t preTriggerSamples = 0;
+    uint32_t postTriggerSamples = x;    // samples per record
+    uint32_t recordsPerBuffer = y;      // records per buffer
+    U32 recordsPerAcquisition = 0x7FFFFFFF;
 
+    // get activated channel mask / activated channel num
+    uint32_t channelMask = 0;
+    uint32_t activatedChannelNum = 0;
+    for(int i=0; i < (int)MICfgGetChannelNum(); i++)
+    {
+        if(MICfgLaserGetSwitch(pConfig, i) == LASER_CHAN_SWITCH_ON)
+        {
+            activatedChannelNum++;
+            channelMask |= (1U << i);
+        }
+    }
+    if(activatedChannelNum == 3)        // 3 channel not supported for ATS9440
+    {
+        activatedChannelNum = 4;
+        channelMask |= 0x0F;
+    }
+
+    // get the sample size in bits, and the on-board memory size in samples per channel
+    U8 bitsPerSample;
+    U32 maxSamplesPerChannel;
+    code = AlazarGetChannelInfo(ats->handle, &maxSamplesPerChannel, &bitsPerSample);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_GET_CHANNEL_INFO_FAILED;
+    }
+
+    // calculate the size of each DMA buffer in bytes
+    U32 bytesPerSample = (bitsPerSample + 7) / 8;
+    U32 samplesPerRecord = preTriggerSamples + postTriggerSamples;
+    U32 bytesPerRecord = bytesPerSample * samplesPerRecord;
+    U32 bytesPerBuffer = bytesPerRecord * recordsPerBuffer * activatedChannelNum;
+
+    // allocate memory for DMA buffers
+    ats->buffer = (uint16_t*)malloc(bytesPerBuffer);
+    if(ats->buffer == NULL)
+    {
+        return API_FAILED_ATS_MALLOC_BUFFER_FAILED;
+    }
+
+    // config ats record size
+    code = AlazarSetRecordSize(ats->handle, preTriggerSamples, postTriggerSamples);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_SET_RECORD_SIZE_FAILED;
+    }
+
+    // config the ats borad to make an NPT AUTODMA acquisition
+    U32 flag = ADMA_NPT | ADMA_ALLOC_BUFFERS | ADMA_EXTERNAL_STARTCAPTURE;
+    code = AlazarBeforeAsyncRead(ats->handle,
+                                 channelMask,
+                                 -(long)preTriggerSamples,
+                                 samplesPerRecord,
+                                 recordsPerBuffer,
+                                 recordsPerAcquisition,
+                                 flag);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_CONFIG_ASYNC_READ_FAILED;
+    }
+
+    // for resonant scan mode, enable CRS is needed
+    if(MICfgGetSacnMode(pConfig) == SCAN_MODE_RESONANT)
+    {
+        code = AlazarConfigureAuxIO(ats->handle, AUX_OUT_SERIAL_DATA, 1);
+        if(code != ApiSuccess)
+        {
+            return API_FAILED_ATS_ENABLE_CRS_FAILED;
+        }
+    }
+
+    code = AlazarStartCapture(ats->handle);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_START_CAPTURE_FAILED;
+    }
+
+    code = AlazarForceTriggerEnable(ats->handle);
+
+    ats->worker->start();
 
     return API_SUCCESS;
 }
+
+MI_RESULTS MIAtsStop(ATS pAts)
+{
+    if(pAts == NULL)
+    {
+        return API_FAILED_ATS_HANDLE_INVALID;
+    }
+
+    PMIAts ats = (PMIAts)pAts;
+    RETURN_CODE code = ApiSuccess;
+
+    code = AlazarAbortAsyncRead(ats->handle);
+    if(code != ApiSuccess)
+    {
+        return API_FAILED_ATS_ABORT_ASYNC_READ_FAILED;
+    }
+
+    free(ats->buffer);
+
+    ats->worker->stop();
+
+    return API_SUCCESS;
+}
+

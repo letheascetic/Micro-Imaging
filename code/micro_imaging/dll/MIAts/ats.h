@@ -4,11 +4,11 @@
 #include <QObject>
 
 #include "midef.h"
-#include "micfg.h"
 #include "worker.h"
 #include "inc/AlazarApi.h"
 #include "inc/AlazarCmd.h"
 #include "inc/AlazarError.h"
+#include "../../lib/MICfg/micfg.h"
 
 typedef void* ATS;
 
@@ -36,6 +36,7 @@ public:
 
 public:
     HANDLE handle;
+    uint16_t* buffer;
     ATS_WORKER *worker;
 
 private:

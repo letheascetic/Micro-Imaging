@@ -1,4 +1,7 @@
 #include "worker.h"
+#include "inc/AlazarApi.h"
+#include "inc/AlazarCmd.h"
+#include "inc/AlazarError.h"
 
 ATS_WORKER::ATS_WORKER(QObject *parent):QThread(parent), m_bStopped(false)
 {
