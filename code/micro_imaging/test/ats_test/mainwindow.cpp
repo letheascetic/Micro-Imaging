@@ -34,15 +34,16 @@ void MainWindow::on_btnStop_clicked()
 
 void MainWindow::on_btnOpen_clicked()
 {
-    //config = MICfgGetConfiguration();
+    qDebug() << "open ats device.";
+    config = MICfgGetConfiguration();
 
-//    ats = MIAtsOpen();
-//    ATS_INFO info;
-//    MI_RESULTS code = MIAtsGetInfo(ats, &info);
-//    qDebug("MIAstGetInfo: [%d]", code);
+    //ats = MIAtsOpen();
+    //ATS_INFO info;
+    //MI_RESULTS code = MIAtsGetInfo(ats, &info);
+    //qDebug("MIAstGetInfo: [%d]", code);
 
-//    code = MIAtsSetConfiguration(ats, config);
-//    qDebug("MIAtsSetConfiguration: [%d]", code);
+    //code = MIAtsSetConfiguration(ats, config);
+    //qDebug("MIAtsSetConfiguration: [%d]", code);
 }
 
 void MainWindow::on_btnClose_clicked()
