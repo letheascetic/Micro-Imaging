@@ -1,5 +1,5 @@
 TEMPLATE = lib
-DEFINES += MIATS_LIBRARY
+CONFIG += staticlib
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -15,14 +15,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     miats.cpp \
-    worker.cpp \
-    ats.cpp
+    worker.cpp
 
 HEADERS += \
-    MIAts_global.h \
     miats.h \
-    worker.h \
-    ats.h
+    worker.h
 
 
 # Default rules for deployment.
@@ -41,14 +38,15 @@ LIBS += -L../../bin/Release
 
 INCLUDEPATH += ../MIDef/
 INCLUDEPATH += ../MICfg/
-INCLUDEPATH += $$PWD/inc/
+INCLUDEPATH += ./inc/
 
 DEPENDPATH += ../MIDef/
 DEPENDPATH += ../MICfg/
 DEPENDPATH += $$PWD/lib/x64/
 
-LIBS += -L$$PWD/lib/x64/ -lAtsApi
 LIBS += -lMICfg
 LIBS += -lMIDef
+LIBS += -L$$PWD/lib/x64/ -lAtsApi
+
 
 

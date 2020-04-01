@@ -25,31 +25,33 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-TRANSLATIONS += \
-    app_zh_CN.ts
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 CONFIG(debug, debug|release) {
-    DESTDIR = ../bin/Debug
-    LIBS += -L../bin/Debug
+    DESTDIR = ../../bin/Debug
+    LIBS += -L../../bin/Debug
 } else {
-    DESTDIR = ../bin/Release
-    LIBS += -L../bin/Release
+    DESTDIR = ../../bin/Release
+    LIBS += -L../../bin/Release
 }
 
-#INCLUDEPATH += ../src/MIDef/
-#INCLUDEPATH += ../src/MICfg/
-#INCLUDEPATH += ../src/MIAts/
-#DEPENDPATH += ../src/MIDef/
-#DEPENDPATH += ../src/MICfg/
-#DEPENDPATH += ../src/MIAts/
-#LIBS += -lMIDef
-#LIBS += -lMICfg
-#LIBS += -lMIAts
+INCLUDEPATH += ../../src/MIDef/
+INCLUDEPATH += ../../src/MICfg/
+INCLUDEPATH += ../../src/MIAts/
+INCLUDEPATH += ../../src/MIAts/inc/
+
+DEPENDPATH += ../../src/MIDef/
+DEPENDPATH += ../../src/MICfg/
+DEPENDPATH += ../../src/MIAts/
+DEPENDPATH += ../../src/MIAts/lib/x64/
+
+LIBS += -lMIDef
+LIBS += -lMICfg
+LIBS += -lMIAts
+LIBS += -L$$PWD/../../src/MIAts/lib/x64/ -lAtsApi
 
 
 

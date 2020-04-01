@@ -30,11 +30,12 @@ unix {
 
 CONFIG(debug, debug|release) {
 DESTDIR = ../../bin/Debug
+LIBS += -L../../bin/Debug/ -lMIDef
 } else {
 DESTDIR = ../../bin/Release
+LIBS += -L../../bin/Release/ -lMIDef
 }
 
 INCLUDEPATH += ../MIDef/
 DEPENDPATH += ../MIDef/
-LIBS += -lMIDef
 

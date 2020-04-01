@@ -5,7 +5,7 @@
 
 ATS_WORKER::ATS_WORKER(QObject *parent):QThread(parent), m_bStopped(false)
 {
-
+    m_status.buffer = NULL;
 }
 
 ATS_WORKER::~ATS_WORKER()
@@ -34,5 +34,10 @@ void ATS_WORKER::stop()
 {
     QMutexLocker locker(&m_mutex);
     m_bStopped = true;
+}
+
+void ATS_WORKER::getReady(WORKER_STATUS m_status)
+{
+    this->m_status = m_status;
 }
 
