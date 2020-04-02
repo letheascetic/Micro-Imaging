@@ -1,9 +1,9 @@
 #include "extract.h"
+#include "miats.h"
 
 EXTRACT::EXTRACT(PMIAts pAts): m_bStopped(false)
 {
     m_pAts = pAts;
-    //m_status.buffer = NULL;
 }
 
 EXTRACT::~EXTRACT()
@@ -34,17 +34,28 @@ void EXTRACT::stop()
     m_bStopped = true;
 }
 
-void EXTRACT::getReady(WORKER_STATUS m_status)
-{
-    //this->m_status = m_status;
-}
-
-void EXTRACT::getBuffer()
+void EXTRACT::extract()
 {
     RETURN_CODE code = ApiSuccess;
-    //m_pAts
-    //code = AlazarWaitNextAsyncBufferComplete()
+    uint16_t* buffer = NULL;
 
-
-
+    while(!m_bStopped)
+    {
+        buffer = m_pAts->m_buffers.NextUnused();
+        code = AlazarWaitNextAsyncBufferComplete(m_pAts->handle, buffer, m_pAts->m_buffers.ElementSize(), 1000);
+        if(code == ApiSuccess || code == ApiTransferComplete)  // new buffer achieved
+        {
+            buffer = m_pAts->m_buffers.Dequeue();
+            m_pAts->m_buffers.Enqueue(buffer);
+            emit BufferReceived();
+        }
+        else if(code == ApiWaitTimeout)
+        {
+            // To do: log timeout event
+        }
+        else
+        {
+            // To do: log this error
+        }
+    }
 }

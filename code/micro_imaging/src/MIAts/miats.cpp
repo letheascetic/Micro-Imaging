@@ -5,26 +5,27 @@
 
 ATS pMIats = NULL;
 
-_MI_ATS::_MI_ATS(HANDLE handle)
+_MI_ATS::_MI_ATS()
 {
-    this->handle = handle;
-    this->buffer = NULL;
-    this->worker = new EXTRACT(this);
+    this->handle = NULL;
+    this->m_extract = new EXTRACT(this);
+    this->m_convert = new CONVERT(this);
 }
 
 _MI_ATS::~_MI_ATS()
 {
     handle = NULL;
-    if(worker != NULL)
+
+    if(m_extract != NULL)
     {
-        delete worker;
+        delete m_extract;
     }
-    worker = NULL;
-    if(buffer != NULL)
+    m_extract = NULL;
+
+    if(m_convert != NULL)
     {
-        delete buffer;
+        delete m_convert;
     }
-    buffer = NULL;
 }
 
 ATS MIAtsOpen(void)
@@ -34,7 +35,8 @@ ATS MIAtsOpen(void)
         HANDLE handle = AlazarGetBoardBySystemID(ALAZAR_BOARD_SYSTEM_ID, ALAZAR_BOARD_ID);
         if(handle)
         {
-            PMIAts pATS = new MIAts(handle);
+            PMIAts pATS = new MIAts();
+            pATS->handle = handle;
             pMIats = pATS;
         }
     }
@@ -251,11 +253,8 @@ MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
     U32 bytesPerBuffer = bytesPerRecord * recordsPerBuffer * activatedChannelNum;
 
     // allocate memory for DMA buffers
-    ats->buffer = (uint16_t*)malloc(bytesPerBuffer);
-    if(ats->buffer == NULL)
-    {
-        return API_FAILED_ATS_MALLOC_BUFFER_FAILED;
-    }
+    ats->m_buffers.InitQueue(bytesPerBuffer);
+    ats->m_images.InitQueue(bytesPerBuffer);
 
     // config ats record size
     code = AlazarSetRecordSize(ats->handle, preTriggerSamples, postTriggerSamples);
@@ -301,13 +300,13 @@ MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
     }
 
     WORKER_STATUS w_status;
-    w_status.buffer = ats->buffer;
+    //w_status.buffer = ats->buffer;
     w_status.bytesPerBuffer = bytesPerBuffer;
     w_status.buffersCompleted = 0;
     w_status.bytesTransferred = 0;
 
-    ats->worker->getReady(w_status);
-    ats->worker->start();
+    ats->m_extract->start();
+    //ats->m_convert->start();
 
     return API_SUCCESS;
 }
@@ -328,9 +327,7 @@ MI_RESULTS MIAtsStop(ATS pAts)
         return API_FAILED_ATS_ABORT_ASYNC_READ_FAILED;
     }
 
-    ats->worker->stop();
-    free(ats->buffer);
-    ats->buffer = NULL;
+    ats->m_extract->stop();
 
     return API_SUCCESS;
 }

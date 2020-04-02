@@ -7,6 +7,7 @@
 #include "micfg.h"
 #include "queue.h"
 #include "extract.h"
+#include "convert.h"
 
 typedef void* ATS;
 
@@ -29,24 +30,23 @@ class _MI_ATS: public QObject
     Q_OBJECT
 
 public:
-    _MI_ATS(HANDLE handle);
+    _MI_ATS();
     ~_MI_ATS();
 
 public:
-    HANDLE handle;          // handle for ats device
-    ATS_QUEUE<uint16_t*>  m_bufQueue;
-    EXTRACT *worker;     // pointer to work thread
-    uint16_t* buffer;     // to do: ring buffers is better
+    HANDLE handle;       // handle for ats device
+    ATS_QUEUE<uint16_t*> m_buffers;
+    ATS_QUEUE<uint16_t*> m_images;
+    EXTRACT *m_extract;  // pointer to extract thread
+    CONVERT *m_convert;  // pointer to convert thread
 
 private:
-    //bool m_bRunning;
+    bool m_bRunning;
 
 signals:
     //void BufferReceived();
 
 };
-
-
 
 ATS MIAtsOpen(void);
 void MIAtsClose(void);

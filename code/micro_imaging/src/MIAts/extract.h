@@ -11,7 +11,6 @@
 #include "AlazarError.h"
 
 class _MI_ATS;
-
 typedef _MI_ATS MIAts, *PMIAts;
 
 typedef struct _WORKER_STATUS
@@ -19,7 +18,7 @@ typedef struct _WORKER_STATUS
     U32 bytesPerBuffer;
     U32 buffersCompleted;
     U32 bytesTransferred;
-    uint16_t* buffer;
+    //uint16_t* buffer;
 }WORKER_STATUS;
 
 class EXTRACT : public QThread
@@ -30,11 +29,11 @@ public:
     ~EXTRACT();
     void run();
     void stop();
-    void getReady(WORKER_STATUS m_status);
-    void getBuffer();
+    void extract();
 
 signals:
     void BufferReady(int value);
+    void BufferReceived();
 
 private:
     bool m_bStopped;
