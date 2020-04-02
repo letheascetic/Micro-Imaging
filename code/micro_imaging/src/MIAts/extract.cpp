@@ -1,19 +1,19 @@
 #include "extract.h"
 
-EXTRACTOR::EXTRACTOR(PMIAts pAts): m_bStopped(false)
+EXTRACT::EXTRACT(PMIAts pAts): m_bStopped(false)
 {
     m_pAts = pAts;
     //m_status.buffer = NULL;
 }
 
-EXTRACTOR::~EXTRACTOR()
+EXTRACT::~EXTRACT()
 {
     stop();
     quit();
     wait();
 }
 
-void EXTRACTOR::run()
+void EXTRACT::run()
 {
     int nValue = 10;
     while (nValue--)
@@ -28,18 +28,18 @@ void EXTRACTOR::run()
     }
 }
 
-void EXTRACTOR::stop()
+void EXTRACT::stop()
 {
     QMutexLocker locker(&m_mutex);
     m_bStopped = true;
 }
 
-void EXTRACTOR::getReady(WORKER_STATUS m_status)
+void EXTRACT::getReady(WORKER_STATUS m_status)
 {
     //this->m_status = m_status;
 }
 
-void EXTRACTOR::getBuffer()
+void EXTRACT::getBuffer()
 {
     RETURN_CODE code = ApiSuccess;
     //m_pAts

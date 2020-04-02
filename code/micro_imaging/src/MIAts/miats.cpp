@@ -9,7 +9,7 @@ _MI_ATS::_MI_ATS(HANDLE handle)
 {
     this->handle = handle;
     this->buffer = NULL;
-    this->worker = new EXTRACTOR(this);
+    this->worker = new EXTRACT(this);
 }
 
 _MI_ATS::~_MI_ATS()

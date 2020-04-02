@@ -22,12 +22,12 @@ typedef struct _WORKER_STATUS
     uint16_t* buffer;
 }WORKER_STATUS;
 
-class EXTRACTOR : public QThread
+class EXTRACT : public QThread
 {
     Q_OBJECT
 public:
-    EXTRACTOR(PMIAts pAts);
-    ~EXTRACTOR();
+    EXTRACT(PMIAts pAts);
+    ~EXTRACT();
     void run();
     void stop();
     void getReady(WORKER_STATUS m_status);
@@ -43,6 +43,6 @@ private:
     //WORKER_STATUS m_status;
 };
 
-typedef EXTRACTOR* PATS_WORKER;
+typedef EXTRACT* PEXTRACT;
 
 #endif // WORKER_H

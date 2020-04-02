@@ -35,7 +35,7 @@ public:
 public:
     HANDLE handle;          // handle for ats device
     ATS_QUEUE<uint16_t*>  m_bufQueue;
-    EXTRACTOR *worker;     // pointer to work thread
+    EXTRACT *worker;     // pointer to work thread
     uint16_t* buffer;     // to do: ring buffers is better
 
 private:
