@@ -5,11 +5,11 @@
 
 ATS pMIats = NULL;
 
-_MI_ATS::_MI_ATS()
+_MI_ATS::_MI_ATS(HANDLE handle)
 {
-    handle = NULL;
-    worker = NULL;
-    buffer = NULL;
+    this->handle = handle;
+    this->buffer = NULL;
+    this->worker = new EXTRACTOR(this);
 }
 
 _MI_ATS::~_MI_ATS()
@@ -34,9 +34,7 @@ ATS MIAtsOpen(void)
         HANDLE handle = AlazarGetBoardBySystemID(ALAZAR_BOARD_SYSTEM_ID, ALAZAR_BOARD_ID);
         if(handle)
         {
-            PMIAts pATS = new MIAts();
-            pATS->handle = handle;
-            pATS->worker = new ATS_WORKER();
+            PMIAts pATS = new MIAts(handle);
             pMIats = pATS;
         }
     }
@@ -332,6 +330,7 @@ MI_RESULTS MIAtsStop(ATS pAts)
 
     ats->worker->stop();
     free(ats->buffer);
+    ats->buffer = NULL;
 
     return API_SUCCESS;
 }

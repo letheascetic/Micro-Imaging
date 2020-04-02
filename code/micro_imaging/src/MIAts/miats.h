@@ -5,7 +5,8 @@
 
 #include "midef.h"
 #include "micfg.h"
-#include "worker.h"
+#include "queue.h"
+#include "extract.h"
 
 typedef void* ATS;
 
@@ -28,13 +29,14 @@ class _MI_ATS: public QObject
     Q_OBJECT
 
 public:
-    _MI_ATS();
+    _MI_ATS(HANDLE handle);
     ~_MI_ATS();
 
 public:
-    HANDLE handle;
-    uint16_t* buffer;
-    ATS_WORKER *worker;
+    HANDLE handle;          // handle for ats device
+    ATS_QUEUE<uint16_t*>  m_bufQueue;
+    EXTRACTOR *worker;     // pointer to work thread
+    uint16_t* buffer;     // to do: ring buffers is better
 
 private:
     //bool m_bRunning;
@@ -44,7 +46,7 @@ signals:
 
 };
 
-typedef _MI_ATS MIAts, *PMIAts;
+
 
 ATS MIAtsOpen(void);
 void MIAtsClose(void);

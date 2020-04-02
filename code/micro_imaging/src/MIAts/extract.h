@@ -1,5 +1,5 @@
-#ifndef WORKER_H
-#define WORKER_H
+#ifndef EXTRACT_H
+#define EXTRACT_H
 
 #include <QDebug>
 #include <QObject>
@@ -10,6 +10,10 @@
 #include "AlazarCmd.h"
 #include "AlazarError.h"
 
+class _MI_ATS;
+
+typedef _MI_ATS MIAts, *PMIAts;
+
 typedef struct _WORKER_STATUS
 {
     U32 bytesPerBuffer;
@@ -18,15 +22,16 @@ typedef struct _WORKER_STATUS
     uint16_t* buffer;
 }WORKER_STATUS;
 
-class ATS_WORKER : public QThread
+class EXTRACTOR : public QThread
 {
     Q_OBJECT
 public:
-    explicit ATS_WORKER(QObject *parent = nullptr);
-    ~ATS_WORKER();
+    EXTRACTOR(PMIAts pAts);
+    ~EXTRACTOR();
     void run();
     void stop();
     void getReady(WORKER_STATUS m_status);
+    void getBuffer();
 
 signals:
     void BufferReady(int value);
@@ -34,9 +39,10 @@ signals:
 private:
     bool m_bStopped;
     QMutex m_mutex;
-    WORKER_STATUS m_status;
+    PMIAts m_pAts;
+    //WORKER_STATUS m_status;
 };
 
-typedef ATS_WORKER* PATS_WORKER;
+typedef EXTRACTOR* PATS_WORKER;
 
 #endif // WORKER_H
