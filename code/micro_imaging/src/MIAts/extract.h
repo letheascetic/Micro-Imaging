@@ -18,7 +18,6 @@ typedef struct _WORKER_STATUS
     U32 bytesPerBuffer;
     U32 buffersCompleted;
     U32 bytesTransferred;
-    //uint16_t* buffer;
 }WORKER_STATUS;
 
 class EXTRACT : public QThread
@@ -29,17 +28,18 @@ public:
     ~EXTRACT();
     void run();
     void stop();
+    bool isRunning();
+
+private:
     void extract();
 
 signals:
-    void BufferReady(int value);
-    void BufferReceived();
+    void BufferExtracted();
 
 private:
-    bool m_bStopped;
+    bool m_bRunning;
     QMutex m_mutex;
     PMIAts m_pAts;
-    //WORKER_STATUS m_status;
 };
 
 typedef EXTRACT* PEXTRACT;

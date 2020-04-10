@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //init();
+    init();
 }
 
 MainWindow::~MainWindow()
@@ -22,14 +22,14 @@ void MainWindow::init()
 
 void MainWindow::on_btnStart_clicked()
 {
-    //MI_RESULTS code = MIAtsStart(ats, config);
-    //qDebug("MIAtsStart: [%d]", code);
+    MI_RESULTS code = MIAtsStart(ats, config);
+    qDebug("MIAtsStart: [%d]", code);
 }
 
 void MainWindow::on_btnStop_clicked()
 {
-    //MI_RESULTS code = MIAtsStop(ats);
-    //qDebug("MIAtsStart: [%d]", code);
+    MI_RESULTS code = MIAtsStop(ats);
+    qDebug("MIAtsStop: [%d]", code);
 }
 
 void MainWindow::on_btnOpen_clicked()
@@ -37,16 +37,17 @@ void MainWindow::on_btnOpen_clicked()
     qDebug() << "open ats device.";
     config = MICfgGetConfiguration();
 
-    //ats = MIAtsOpen();
-    //ATS_INFO info;
-    //MI_RESULTS code = MIAtsGetInfo(ats, &info);
-    //qDebug("MIAstGetInfo: [%d]", code);
+    ats = MIAtsOpen();
+    ATS_INFO info;
+    MI_RESULTS code = MIAtsGetInfo(ats, &info);
+    qDebug("MIAstGetInfo: [%d]", code);
 
-    //code = MIAtsSetConfiguration(ats, config);
-    //qDebug("MIAtsSetConfiguration: [%d]", code);
+    code = MIAtsSetConfiguration(ats, config);
+    qDebug("MIAtsSetConfiguration: [%d]", code);
 }
 
 void MainWindow::on_btnClose_clicked()
 {
-    //MIAtsClose();
+    MIAtsClose();
+    ats = NULL;
 }

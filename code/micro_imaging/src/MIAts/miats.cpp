@@ -10,6 +10,8 @@ _MI_ATS::_MI_ATS()
     this->handle = NULL;
     this->m_extract = new EXTRACT(this);
     this->m_convert = new CONVERT(this);
+    QObject::connect(this->m_extract, SIGNAL(BufferExtracted()), this, SLOT(BufferExtracted()), Qt::AutoConnection);
+    QObject::connect(this, SIGNAL(BufferToConvert()), this->m_convert, SLOT(BufferToConvert()), Qt::QueuedConnection);
 }
 
 _MI_ATS::~_MI_ATS()
@@ -25,6 +27,15 @@ _MI_ATS::~_MI_ATS()
     if(m_convert != NULL)
     {
         delete m_convert;
+    }
+}
+
+void _MI_ATS::BufferExtracted()
+{
+    qDebug() << "[MIATS]: buffer extarcted.";
+    if(m_extract->isRunning())
+    {
+        emit BufferToConvert();
     }
 }
 
@@ -117,7 +128,7 @@ MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
     RETURN_CODE code = ApiSuccess;
 
     // set clock: internal_clock, sample_rate, clock_edge
-    code = AlazarSetCaptureClock(handle, INTERNAL_CLOCK, SAMPLE_RATE_10MSPS, CLOCK_EDGE_RISING, 0);
+    code = AlazarSetCaptureClock(handle, INTERNAL_CLOCK, SAMPLE_RATE_125MSPS, CLOCK_EDGE_RISING, 0);
     if(code != ApiSuccess)
     {
         return API_FAILED_ATS_SET_CLOCK_FAILED;
@@ -147,7 +158,7 @@ MI_RESULTS MIAtsSetConfiguration(ATS pAts, CONFIG pConfig)
 
     // set trigger operation
     double trigger_range_volts = 5.0;
-    double trigger_level_volts = 2.0;
+    double trigger_level_volts = 1.0;
     uint32_t trigger_level = (uint32_t)(128 + 127 * trigger_level_volts / trigger_range_volts);
     code = AlazarSetTriggerOperation(handle,
                               TRIG_ENGINE_OP_J,            // use trigger engine J
@@ -218,7 +229,7 @@ MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
     uint32_t postTriggerSamples = x;    // samples per record
     uint32_t recordsPerBuffer = y;      // records per buffer
     U32 recordsPerAcquisition = 0x7FFFFFFF;
-    //U32 buffersPerAcquisition = recordsPerAcquisition / recordsPerBuffer;
+    U32 buffersPerAcquisition = recordsPerAcquisition / recordsPerBuffer;
 
     // get activated channel mask / activated channel num
     uint32_t channelMask = 0;
@@ -293,20 +304,19 @@ MI_RESULTS MIAtsStart(ATS pAts, CONFIG pConfig)
         return API_FAILED_ATS_START_CAPTURE_FAILED;
     }
 
-    code = AlazarForceTriggerEnable(ats->handle);
-    if(code != ApiSuccess)
-    {
-        return API_FAILED_ATS_FORCE_TRIGGER_ENABLE_FAILED;
-    }
+//    code = AlazarForceTriggerEnable(ats->handle);
+//    if(code != ApiSuccess)
+//    {
+//        return API_FAILED_ATS_FORCE_TRIGGER_ENABLE_FAILED;
+//    }
 
-    WORKER_STATUS w_status;
-    //w_status.buffer = ats->buffer;
-    w_status.bytesPerBuffer = bytesPerBuffer;
-    w_status.buffersCompleted = 0;
-    w_status.bytesTransferred = 0;
+//    WORKER_STATUS w_status;
+//    //w_status.buffer = ats->buffer;
+//    w_status.bytesPerBuffer = bytesPerBuffer;
+//    w_status.buffersCompleted = 0;
+//    w_status.bytesTransferred = 0;
 
     ats->m_extract->start();
-    //ats->m_convert->start();
 
     return API_SUCCESS;
 }

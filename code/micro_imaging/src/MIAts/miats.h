@@ -35,8 +35,8 @@ public:
 
 public:
     HANDLE handle;       // handle for ats device
-    ATS_QUEUE<uint16_t*> m_buffers;
-    ATS_QUEUE<uint16_t*> m_images;
+    ATS_QUEUE m_buffers; // buffers queue
+    ATS_QUEUE m_images;  // images queue
     EXTRACT *m_extract;  // pointer to extract thread
     CONVERT *m_convert;  // pointer to convert thread
 
@@ -44,8 +44,10 @@ private:
     bool m_bRunning;
 
 signals:
-    //void BufferReceived();
+    void BufferToConvert();
 
+public slots:
+    void BufferExtracted();
 };
 
 ATS MIAtsOpen(void);

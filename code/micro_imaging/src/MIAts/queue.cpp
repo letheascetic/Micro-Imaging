@@ -1,25 +1,23 @@
 #include "queue.h"
 
-template<class T>
-ATS_QUEUE<T>::ATS_QUEUE()
+ATS_QUEUE::ATS_QUEUE()
 {
+    m_elemSize = 0;
     m_Initialized = false;
 }
 
-template<class T>
-ATS_QUEUE<T>::~ATS_QUEUE()
+ATS_QUEUE::~ATS_QUEUE()
 {
     ReleaseQueue();
 }
 
-template<class T>
-void ATS_QUEUE<T>::InitQueue(uint32_t eSize, uint32_t qSize)
+void ATS_QUEUE::InitQueue(uint32_t eSize, uint32_t qSize)
 {
     ReleaseQueue();
 
     m_elemSize = eSize;
     uint16_t* buffer = NULL;
-    while(m_unusedQueue.size() < qSize)
+    while(m_unusedQueue.size() < (int)qSize)
     {
         buffer = (uint16_t*)malloc(m_elemSize);
         if(buffer != NULL)
@@ -29,35 +27,30 @@ void ATS_QUEUE<T>::InitQueue(uint32_t eSize, uint32_t qSize)
     }
 }
 
-template<class T>
-void ATS_QUEUE<T>::ReleaseQueue()
+void ATS_QUEUE::ReleaseQueue()
 {
     m_unusedQueue.clear();
     m_usedQueue.clear();
     m_Initialized = false;
-    m_buffSize = 0;
+    m_elemSize = 0;
 }
 
-template<class T>
-bool ATS_QUEUE<T>::Initialized()
+bool ATS_QUEUE::Initialized()
 {
     return m_Initialized;
 }
 
-template<class T>
-uint32_t ATS_QUEUE<T>::UsedSize()
+uint32_t ATS_QUEUE::UsedSize()
 {
     return m_usedQueue.size();
 }
 
-template<class T>
-uint32_t ATS_QUEUE<T>::UnusedSize()
+uint32_t ATS_QUEUE::UnusedSize()
 {
     return m_unusedQueue.size();
 }
 
-template<class T>
-T ATS_QUEUE<T>::NextUnused()
+uint16_t* ATS_QUEUE::NextUnused()
 {
     if(m_unusedQueue.isEmpty())
     {
@@ -66,8 +59,7 @@ T ATS_QUEUE<T>::NextUnused()
     return m_unusedQueue.head();
 }
 
-template<class T>
-T ATS_QUEUE<T>::LastUsed()
+uint16_t* ATS_QUEUE::LastUsed()
 {
     if(m_usedQueue.isEmpty())
     {
@@ -76,14 +68,12 @@ T ATS_QUEUE<T>::LastUsed()
     return m_usedQueue.last();
 }
 
-template<class T>
-uint32_t ATS_QUEUE<T>::ElementSize()
+uint32_t ATS_QUEUE::ElementSize()
 {
     return m_elemSize;
 }
 
-template<class T>
-T ATS_QUEUE<T>::Dequeue()
+uint16_t* ATS_QUEUE::Dequeue()
 {
     if(m_unusedQueue.isEmpty())
     {
@@ -92,8 +82,7 @@ T ATS_QUEUE<T>::Dequeue()
     return m_unusedQueue.dequeue();
 }
 
-template<class T>
-void ATS_QUEUE<T>::Enqueue(T element)
+void ATS_QUEUE::Enqueue(uint16_t* element)
 {
     m_usedQueue.enqueue(element);
 }

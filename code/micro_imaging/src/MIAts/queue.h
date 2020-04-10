@@ -1,10 +1,9 @@
 #ifndef ATS_QUEUE_H
-#define AST_QUEUE_H
+#define ATS_QUEUE_H
 
 #include <QQueue>
-#define QUEUE_SIZE_DEFAULT 16
+#define QUEUE_SIZE_DEFAULT 31
 
-template<class T>
 class ATS_QUEUE
 {
 public:
@@ -16,17 +15,16 @@ public:
     uint32_t UsedSize(void);
     uint32_t UnusedSize(void);
     uint32_t ElementSize(void);
-    T NextUnused(void);
-    T LastUsed(void);
-    T Dequeue(void);
-    void Enqueue(T);
+    uint16_t* NextUnused(void);
+    uint16_t* LastUsed(void);
+    uint16_t* Dequeue(void);
+    void Enqueue(uint16_t*);
 
 private:
     bool m_Initialized;
     uint32_t m_elemSize;        // bytes per element
-    QQueue<T> m_unusedQueue;
-    QQueue<T> m_usedQueue;
+    QQueue<uint16_t*> m_unusedQueue;
+    QQueue<uint16_t*> m_usedQueue;
 };
-
 
 #endif // ATS_QUEUE_H
