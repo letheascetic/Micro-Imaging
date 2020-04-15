@@ -12,7 +12,4 @@ MI_RESULTS MILaserSetPower(LASER_CHAN_ID channelId, double power);
 MI_RESULTS MILaserUpPower(LASER_CHAN_ID channelId);
 MI_RESULTS MILaserDownPower(LASER_CHAN_ID channelId);
 
-
-
-
 #endif // MILASER_H
