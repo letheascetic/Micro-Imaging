@@ -4,6 +4,7 @@ SUBDIRS += \
     MIAts \
     MIDef \
     MICfg \
+    MILaser \
     MINI
 
 

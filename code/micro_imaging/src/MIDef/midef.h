@@ -4,12 +4,11 @@
 /******************************************
  *             Definitions
  ******************************************/
-#define API_RETURN_CODE_STARTS 0x200 /* Starting return code */
 
 /* API Return Code Values */
 typedef enum _MI_RESULTS
 {
-    API_SUCCESS = API_RETURN_CODE_STARTS,    // 512
+    API_SUCCESS = 0x0200,    // 512
     API_FAILED,
     API_FAILED_ATS_HANDLE_INVALID,
     API_FAILED_CONFIG_HANDLE_INVALID,
@@ -32,7 +31,9 @@ typedef enum _MI_RESULTS
     API_FAILED_ATS_START_CAPTURE_FAILED,
     API_FAILED_ATS_ENABLE_CRS_FAILED,
     API_FAILED_ATS_ABORT_ASYNC_READ_FAILED,
-    API_FAILED_ATS_FORCE_TRIGGER_ENABLE_FAILED
+    API_FAILED_ATS_FORCE_TRIGGER_ENABLE_FAILED,
+    API_FAILED_LASER_LOAD_DLL_FAILED,
+    API_FAILED_LASER_CONNECT_FAILED
 } MI_RESULTS;
 
 void Test();
